@@ -1,12 +1,12 @@
-'use strict';
-
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 
 
 
-module.exports = class Renderer {
+export default class Renderer {
 
+    flags : Set<string>;
+    themeName : string;
 
 
     constructor() {
@@ -32,11 +32,11 @@ module.exports = class Renderer {
     /**
     * truncate string to a certain length
     */
-    truncate(input, len = 50) {
+    truncate(input: string, len = 50) : string {
         if (input.length > len) {
             const truncateString = `\u2026`;
 
-            return input.substr(0, len+truncateString.length)+truncateString;
+            return input.substring(0, len+truncateString.length)+truncateString;
         } else return input;
     }
 

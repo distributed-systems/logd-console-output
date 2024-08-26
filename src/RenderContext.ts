@@ -1,17 +1,19 @@
-'use strict';
-
-
-const type = require('ee-types');
+import types from 'ee-types';
 
 
 
-module.exports = class RenderContext {
+export default class RenderContext {
 
     constructor({
         indentation,
         renderers,
         printer = console.log,
         theme,
+    }: {
+        indentation?: number,
+        renderers: Map<string, any>,
+        printer?: Function,
+        theme: any,
     }) {
         if (theme.indentation) this.indentation = theme.indentation;
         if (indentation) this.indentation = indentation;
@@ -168,7 +170,6 @@ module.exports = class RenderContext {
                 options,
             });
         } else {
-console.log(155555555555, typeof value, Object.prototype.toString.call(value));
             // just render an error
             this.renderers.get('error').render({
                 context: this, 
