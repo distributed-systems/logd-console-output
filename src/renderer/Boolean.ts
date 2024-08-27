@@ -1,7 +1,7 @@
 import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
-export default class BooleanRenderer extends Renderer {
+export class BooleanRenderer extends Renderer {
 
     getName() {
         return 'boolean';

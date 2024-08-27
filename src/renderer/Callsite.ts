@@ -4,7 +4,7 @@ import RootPath from 'app-root-path';
 import path from 'path';
 
 
-export default class CallsiteRenderer extends Renderer {
+export class CallsiteRenderer extends Renderer {
 
     getName() {
         return 'callsite';

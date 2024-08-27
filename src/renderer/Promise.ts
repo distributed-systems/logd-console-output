@@ -2,7 +2,7 @@ import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
 
-export default class PromiseRenderer extends Renderer {
+export class PromiseRenderer extends Renderer {
 
     getName() {
         return 'promise';

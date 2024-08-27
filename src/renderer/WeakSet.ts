@@ -2,7 +2,7 @@ import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
 
-export default  class WeakSetRenderer extends Renderer {
+export class WeakSetRenderer extends Renderer {
 
     getName() {
         return 'weakSet';

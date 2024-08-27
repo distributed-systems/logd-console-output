@@ -1,7 +1,7 @@
 import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
-export default  class LabelRenderer extends Renderer {
+export class LabelRenderer extends Renderer {
 
     getName() {
         return 'decoration';

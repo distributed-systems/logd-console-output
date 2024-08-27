@@ -5,7 +5,7 @@ import types from 'ee-types'
 
 
 
-export default class ErrorRenderer extends Renderer {
+export class ErrorRenderer extends Renderer {
 
 
     errorProperties: string[];

@@ -3,7 +3,7 @@ import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
 
-export default class ErrorRenderer extends Renderer {
+export class ErrorRenderer extends Renderer {
 
 
     errorProperties: string[];

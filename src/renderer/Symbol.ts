@@ -2,7 +2,7 @@ import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
 
-export default class SmbolRenderer extends Renderer {
+export class SmbolRenderer extends Renderer {
 
     getName() {
         return 'symbol';

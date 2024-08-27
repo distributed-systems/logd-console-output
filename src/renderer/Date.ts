@@ -1,7 +1,7 @@
 import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
-export default class DateRenderer extends Renderer {
+export class DateRenderer extends Renderer {
 
     getName() {
         return 'date';

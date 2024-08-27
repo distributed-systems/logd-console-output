@@ -2,7 +2,7 @@ import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
 
-export default class ModuleNameRenderer extends Renderer {
+export class ModuleNameRenderer extends Renderer {
 
     getName() {
         return 'moduleName';

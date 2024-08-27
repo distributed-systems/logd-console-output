@@ -7,7 +7,7 @@ interface ILine {
 }
 
 
-export default class FunctionRenderer extends Renderer {
+export class FunctionRenderer extends Renderer {
 
     getName() {
         return 'function';

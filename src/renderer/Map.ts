@@ -2,7 +2,7 @@ import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
 
-export default class MapRenderer extends Renderer {
+export class MapRenderer extends Renderer {
 
     getName() {
         return 'map';

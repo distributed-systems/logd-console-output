@@ -2,7 +2,7 @@ import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
 
-export default  class NullRenderer extends Renderer {
+export class NullRenderer extends Renderer {
 
     getName() {
         return 'null';

@@ -1,7 +1,7 @@
 import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
-export default class ArrayRenderer extends Renderer {
+export class ArrayRenderer extends Renderer {
 
     getName() {
         return 'array';
