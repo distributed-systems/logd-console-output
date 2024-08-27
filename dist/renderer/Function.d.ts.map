@@ -1,0 +1,1 @@
+{"version":3,"file":"Function.d.ts","sourceRoot":"","sources":["../../src/renderer/Function.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,EAAE,EAAE,eAAe,EAAE,MAAM,eAAe,CAAC;AAS1D,MAAM,CAAC,OAAO,OAAO,gBAAiB,SAAQ,QAAQ;IAElD,OAAO;IAOP,MAAM,CAAC,EACH,OAAO,EACP,KAAK,EACL,KAAK,EACL,UAAU,EACV,OAAO,GACV,EAAE,eAAe;IA2BlB;;;MAGE;IACF,kBAAkB,CAAC,KAAK,EAAE,MAAM,EAAE;CAwBrC"}

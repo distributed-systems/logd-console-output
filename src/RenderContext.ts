@@ -1,8 +1,38 @@
 import types from 'ee-types';
+import Renderer from './renderer/Renderer.js';
+import Theme from './themes/lib/Theme.js';
+import Decorator from './themes/lib/Decorator.js';
 
 
+export interface RenderDecoration {
+    label?: string;
+    decoration?: string;
+    close?: boolean
+}
+
+
+export interface ICallsite {
+    type: string;
+    function: string;
+    method: string;
+    fileName: string;
+    lineNumber: number;
+    character: number;
+    message: string;
+}
 
 export default class RenderContext {
+
+    indentation : number;
+    renderers : Map<string, Renderer>;
+    printer : Function;
+    theme : Theme;
+    level : number;
+    lineBuffer : string;
+    processedObjects : WeakSet<any>;
+    maxArrayLength : number;
+    maxStringLength : number;
+
 
     constructor({
         indentation,
@@ -11,9 +41,9 @@ export default class RenderContext {
         theme,
     }: {
         indentation?: number,
-        renderers: Map<string, any>,
+        renderers: Map<string, Renderer>,
         printer?: Function,
-        theme: any,
+        theme: Theme,
     }) {
         if (theme.indentation) this.indentation = theme.indentation;
         if (indentation) this.indentation = indentation;
@@ -44,6 +74,10 @@ export default class RenderContext {
         maxArrayLength,
         maxStringLength,
         indentation,
+    } : {
+        maxArrayLength?: number,
+        maxStringLength?: number,
+        indentation?: number,
     } = {}) {
         if (maxArrayLength) this.maxArrayLength = maxArrayLength;
         if (maxStringLength) this.maxStringLength = maxStringLength;
@@ -57,8 +91,10 @@ export default class RenderContext {
     /**
     * render a lable fo a value
     */
-    renderDecoration(value) {
-        this.renderers.get('decoration').render({
+    renderDecoration(value: RenderDecoration) {
+        if (!this.renderers.has('decoration')) throw new Error(`No decoration renderer present!`);
+
+        this.renderers.get('decoration')!.render({
             context: this,
             value: value,
         });
@@ -71,12 +107,11 @@ export default class RenderContext {
     /**
     * return a theme config for a given element
     */
-    getThemeFor(element, decorator) {
+    getThemeFor(element: string, decorator: string) : Decorator {
         if (!this.theme) throw new Error(`No theme set on the reenderContext!`);
-        if (!this.theme.renderers) throw new Error(`No renderers configurations present fr the theme '${theme.name}'!`);
-        if (!this.theme.renderers[element]) throw new Error(`The '${this.theme.name}' theme doesn't contain a definition for the element '${element}'!`);
-        if (!this.theme.renderers[element][decorator]) throw new Error(`The '${this.theme.name}' theme doesn't contain a definition for the decorator '${decorator}' of the element '${element}'!`);
-        return this.theme.renderers[element][decorator];
+        if (!this.theme.hasType(element)) throw new Error(`The '${this.theme.name}' theme doesn't contain a definition for the element '${element}'!`);
+        if (!this.theme.getType(element)!.hasDecorator(decorator)) throw new Error(`The '${this.theme.name}' theme doesn't contain a definition for the decorator '${decorator}' of the element '${element}'!`);
+        return this.theme.getType(element)!.getDecorator(decorator);
     }
 
 
@@ -93,11 +128,30 @@ export default class RenderContext {
         decoration,
         label,
         options,
+        moduleName,
+    } : {
+        values: any[],
+        callsite?: ICallsite,
+        color?: string,
+        decoration?: string,
+        label?: string,
+        options?: any,
+        moduleName?: string,
     }) {
         if (callsite) {
-            this.renderers.get('callsite').render({
+            if (!this.renderers.has('callsite')) throw new Error(`No callsite renderer present!`);
+            this.renderers.get('callsite')!.render({
                 context: this, 
                 value: callsite,
+            });
+        }
+
+
+        if (moduleName) {
+            if (!this.renderers.has('moduleName')) throw new Error(`No moduleName renderer present!`);
+            this.renderers.get('moduleName')!.render({
+                context: this,
+                value: moduleName,
             });
         }
 
@@ -132,15 +186,22 @@ export default class RenderContext {
         decoration,
         label,
         options = {},
+    }: {
+        value: any,
+        color?: string,
+        decoration?: string,
+        label?: string,
+        options?: any,
     }) {
         // make sure no objects is rendered twice
         if (typeof value === 'object' && value !== null) {
             if (this.processedObjects.has(value)) {
-                this.renderers.get('recursion').render({
+                if (!this.renderers.has('recursion')) throw new Error(`No recursion renderer present!`);
+                this.renderers.get('recursion')!.render({
                     context: this,
                     decoration,
                     label,
-                    value: `<circular value ${type(value)}>`,
+                    value: `<circular value ${types(value)}>`,
                 });
                 return;
             } else this.processedObjects.add(value);
@@ -151,15 +212,16 @@ export default class RenderContext {
 
 
         // allow custom renderer assignments
-        if (type.object(value) && value.__logd_custom_renderer) {
+        if (types.object(value) && value.__logd_custom_renderer) {
             valueType = value.__logd_custom_renderer;
         } else {
-            valueType = type(value);
+            valueType = types(value);
         }
 
 
         if (this.renderers.has(valueType)) {
-            const renderer = this.renderers.get(valueType);
+            if (!this.renderers.has(valueType)) throw new Error(`No renderer present for the type '${valueType}'!`);
+            const renderer = this.renderers.get(valueType)!;
 
             renderer.render({
                 context: this,
@@ -170,8 +232,10 @@ export default class RenderContext {
                 options,
             });
         } else {
+            if (!this.renderers.has('error')) throw new Error(`No error renderer present!`);
+
             // just render an error
-            this.renderers.get('error').render({
+            this.renderers.get('error')!.render({
                 context: this, 
                 decoration,
                 label,
@@ -201,7 +265,7 @@ export default class RenderContext {
     /**
     * print to console
     */
-    print(string) {
+    print(string: string) {
         this.lineBuffer += string;
     }   
 

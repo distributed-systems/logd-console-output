@@ -1,0 +1,1 @@
+{"version":3,"file":"Null.d.ts","sourceRoot":"","sources":["../../src/renderer/Null.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,EAAE,EAAE,eAAe,EAAE,MAAM,eAAe,CAAC;AAI1D,MAAM,CAAC,OAAO,OAAQ,YAAa,SAAQ,QAAQ;IAE/C,OAAO;IAOP,MAAM,CAAC,EACH,OAAO,EACP,KAAK,EACL,KAAK,EACL,UAAU,EACV,KAAK,GACR,EAAG,eAAe;CAItB"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"Recursion.d.ts","sourceRoot":"","sources":["../../src/renderer/Recursion.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,EAAE,EAAE,eAAe,EAAE,MAAM,eAAe,CAAC;AAI1D,MAAM,CAAC,OAAO,OAAO,iBAAkB,SAAQ,QAAQ;IAEnD,OAAO;IAOP,MAAM,CAAC,EACH,OAAO,EACP,KAAK,EACL,KAAK,EACL,UAAU,GACb,EAAE,eAAe;CAIrB"}

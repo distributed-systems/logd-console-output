@@ -1,0 +1,1 @@
+{"version":3,"file":"Buffer.d.ts","sourceRoot":"","sources":["../../src/renderer/Buffer.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,EAAE,EAAE,eAAe,EAAE,MAAM,eAAe,CAAC;AAG1D,MAAM,CAAC,OAAO,OAAO,cAAe,SAAQ,QAAQ;IAEhD,OAAO;IAOP,MAAM,CAAC,EACH,OAAO,EACP,KAAK,EACL,KAAK,EACL,UAAU,EACV,KAAK,GACR,EAAG,eAAe;CAItB"}

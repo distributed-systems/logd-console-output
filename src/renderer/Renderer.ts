@@ -1,6 +1,15 @@
 import chalk from 'chalk';
+import RenderContext from '../RenderContext.js';
+import Decorator from '../themes/lib/Decorator.js';
 
-
+export interface IRdenderOptions {
+    context: RenderContext,
+    value: any,
+    label?: string,
+    decoration?: string,
+    color?: string,
+    options?: any,
+}
 
 
 export default class Renderer {
@@ -42,17 +51,32 @@ export default class Renderer {
 
 
 
+    render({
+        context,
+        value,
+        label,
+        decoration,
+        color,
+        options,
+    } : IRdenderOptions) {
+        throw new Error('Not implemented');
+    }
 
 
 
 
-    decorate(context, input, topic, color) {
-        let theme = context.getThemeFor(this.getThemeName(), topic);
+
+    decorate(context: RenderContext, input: string, topic: string, color?: string) {
+        let loadedTheme = context.getThemeFor(this.getThemeName(), topic);
+        
+        const theme : { 
+            [key: string]: boolean | string
+        } = {};
+
+        if (loadedTheme) loadedTheme.apply(theme);
 
         if (color) {
-            theme = {};
-
-            const flags = color.split('.').filter((flag) => {
+            color.split('.').filter((flag) => {
                 if (this.flags.has(flag)) {
                     theme[flag] = true;
                     return false;
@@ -64,8 +88,13 @@ export default class Renderer {
         }
 
         if (theme.reset) input = chalk.reset(input);
+
+        // @ts-ignore
         if (theme.color) input = chalk[theme.color](input);
+
+        // @ts-ignore
         if (theme.bg) input = chalk[`bg${theme.bg[0].toUpperCase()}${theme.bg.substr(1)}`](input);
+        
         if (theme.bold) input = chalk.bold(input);
         if (theme.italic) input = chalk.italic(input);
         if (theme.underline) input = chalk.underline(input);

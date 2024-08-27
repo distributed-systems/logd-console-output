@@ -135,9 +135,10 @@ log.log({
 });
 
 log.log({
-    values: [`a pretty long string that should be trunctaed, but does it? I'm not sure, or am i? i am! So, i'm still in the airplane and someone keep sfarting. Thanks obama! this one gets rendered!`],
+    values: [`a pretty long string that should be trunctaed, but does it? I'm not sure, or am i? i am! So, i'm still in the airplane and someone keeps farting. Thanks obama! this one gets rendered!`],
     color: 'cyan.bold.strikethrough.underline.bgBlue',
     callsite,
+    moduleName: 'my-module',
     options: {
         truncate: 1000
     }

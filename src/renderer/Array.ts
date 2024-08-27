@@ -1,31 +1,23 @@
-'use strict';
-
-const Renderer = require('./Renderer');
+import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
-
-
-
-
-module.exports = class ArrayRenderer extends Renderer {
+export default class ArrayRenderer extends Renderer {
 
     getName() {
         return 'array';
     }
-
 
     
 
     render({
         context,
         value,
-        theme,
         label,
         options,
-    }) {
+    }: IRdenderOptions) {
         context.renderDecoration({label, decoration: `[Array] (${value.length}): [`});
 
-        if (value.length) {
+        if (Array.isArray(value)) {
             context.in();
             value.forEach((value, index) => {
                 context.newLine();
@@ -38,6 +30,6 @@ module.exports = class ArrayRenderer extends Renderer {
             context.newLine();
         }
         
-        context.renderDecoration({decoration: `]`});
+        context.renderDecoration({ decoration: `]` });
     }
 }
