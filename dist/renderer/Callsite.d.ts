@@ -1,6 +1,6 @@
 import { ICallsite } from '../RenderContext.js';
 import Renderer, { IRdenderOptions } from './Renderer.js';
-export default class CallsiteRenderer extends Renderer {
+export declare class CallsiteRenderer extends Renderer {
     getName(): string;
     render({ context, value, }: IRdenderOptions): void;
     getTimeSignature(date: Date | null): string;

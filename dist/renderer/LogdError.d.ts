@@ -1,5 +1,5 @@
 import Renderer, { IRdenderOptions } from './Renderer.js';
-export default class ErrorRenderer extends Renderer {
+export declare class LogdError extends Renderer {
     errorProperties: string[];
     constructor();
     getName(): string;

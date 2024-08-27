@@ -1,5 +1,5 @@
 import Renderer from './Renderer.js';
-export default class NumberRenderer extends Renderer {
+export class NumberRenderer extends Renderer {
     getName() {
         return 'number';
     }

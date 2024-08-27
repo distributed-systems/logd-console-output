@@ -1,5 +1,5 @@
 import Renderer from './Renderer.js';
-export default class RegExpRenderer extends Renderer {
+export class RegExpRenderer extends Renderer {
     getName() {
         return 'regexp';
     }

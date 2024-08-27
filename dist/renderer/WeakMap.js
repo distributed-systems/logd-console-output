@@ -1,5 +1,5 @@
 import Renderer from './Renderer.js';
-export default class WeakMapRenderer extends Renderer {
+export class WeakMapRenderer extends Renderer {
     getName() {
         return 'weakMap';
     }

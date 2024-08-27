@@ -1,5 +1,5 @@
 import Renderer from './Renderer.js';
-export default class RecursionRenderer extends Renderer {
+export class RecursionRenderer extends Renderer {
     getName() {
         return 'recursion';
     }

@@ -1,5 +1,5 @@
 import Renderer, { IRdenderOptions } from './Renderer.js';
-export default class LabelRenderer extends Renderer {
+export declare class LabelRenderer extends Renderer {
     getName(): string;
     render({ context, value, }: IRdenderOptions): void;
 }

@@ -1,5 +1,5 @@
 import Renderer from './Renderer.js';
-export default class BufferRenderer extends Renderer {
+export class BufferRenderer extends Renderer {
     getName() {
         return 'buffer';
     }

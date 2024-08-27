@@ -1,5 +1,5 @@
 import Renderer, { IRdenderOptions } from './Renderer.js';
-export default class MapRenderer extends Renderer {
+export declare class MapRenderer extends Renderer {
     getName(): string;
     render({ context, value, label, decoration, options, }: IRdenderOptions): void;
 }

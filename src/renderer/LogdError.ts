@@ -3,7 +3,7 @@ import Renderer, { IRdenderOptions } from './Renderer.js';
 
 
 
-export class ErrorRenderer extends Renderer {
+export class LogdError extends Renderer {
 
 
     errorProperties: string[];

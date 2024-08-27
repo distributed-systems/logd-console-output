@@ -1,5 +1,5 @@
 import Renderer from './Renderer.js';
-export default class ObjectRenderer extends Renderer {
+export class ObjectRenderer extends Renderer {
     getName() {
         return 'object';
     }

@@ -2,7 +2,7 @@ import Renderer from './Renderer.js';
 import RootPath from 'app-root-path';
 import path from 'path';
 import types from 'ee-types';
-export default class ErrorRenderer extends Renderer {
+export class ErrorRenderer extends Renderer {
     constructor() {
         super();
         this.errorProperties = [
