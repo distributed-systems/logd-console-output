@@ -1,5 +1,7 @@
 import chalk from 'chalk';
 export default class Renderer {
+    flags;
+    themeName;
     constructor() {
         this.flags = new Set(['reset', 'bold', 'italic', 'inverse', 'underline', 'strikethrough', 'dim', 'hidden', 'visible']);
     }

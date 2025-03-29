@@ -1,6 +1,7 @@
-import RenderContext, { ICallsite } from './RenderContext.js';
+import RenderContext from './RenderContext.js';
 import Renderer from './renderer/Renderer.js';
 import Theme from './themes/lib/Theme.js';
+import LogMessage from './LogMessage.js';
 export default class Console {
     renderers: Map<string, Renderer>;
     theme: Theme;
@@ -8,26 +9,22 @@ export default class Console {
     /**
     * load all available renderers from the filesystem
     */
-    loadRenderers(): void;
+    private loadRenderers;
     /**
     * let the user set color themes
     */
-    setTheme(theme: Theme): void;
+    private setTheme;
     /**
     * creates a new render context which is
     * used to render a set of values
     */
-    createContext(): RenderContext;
+    private createContext;
     /**
     * print any type of input to the console
     */
-    log({ values, context, options, callsite, color, moduleName, }: {
-        values: any[];
+    log({ message, context, }: {
+        message: LogMessage;
         context?: RenderContext;
-        options?: any;
-        callsite?: ICallsite;
-        color?: string;
-        moduleName?: string;
     }): RenderContext;
 }
 //# sourceMappingURL=Console.d.ts.map

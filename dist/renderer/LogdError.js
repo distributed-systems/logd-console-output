@@ -1,5 +1,6 @@
 import Renderer from './Renderer.js';
 export class LogdError extends Renderer {
+    errorProperties;
     constructor() {
         super();
         this.themeName = 'error';

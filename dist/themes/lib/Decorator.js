@@ -1,7 +1,9 @@
 export default class Decorator {
+    name;
+    color;
+    bold = false;
+    dim = false;
     constructor({ name, color, bold, dim, }) {
-        this.bold = false;
-        this.dim = false;
         this.name = name;
         if (color)
             this.color = color;

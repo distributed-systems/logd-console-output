@@ -18,7 +18,7 @@ export interface ICallsite {
     fileName: string;
     lineNumber: number;
     character: number;
-    message: string;
+    message?: string;
 }
 
 export default class RenderContext {

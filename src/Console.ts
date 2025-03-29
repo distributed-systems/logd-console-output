@@ -3,7 +3,7 @@ import Renderer from './renderer/Renderer.js';
 import DefaultDark from './themes/DefaultDark.js';
 import * as renderers  from './renderer/index.js';
 import Theme from './themes/lib/Theme.js';
-
+import LogMessage from './LogMessage.js';
 
 
 export default class Console {
@@ -26,7 +26,7 @@ export default class Console {
     /**
     * load all available renderers from the filesystem
     */
-    loadRenderers() {
+    private loadRenderers() {
         for (const Renderer of Object.values(renderers)) {
             const Constructor = Renderer as any;
             const instance = new Constructor();
@@ -41,7 +41,7 @@ export default class Console {
     /**
     * let the user set color themes
     */
-    setTheme(theme: Theme) {
+    private setTheme(theme: Theme) {
         this.theme = theme;
     }
 
@@ -53,7 +53,7 @@ export default class Console {
     * creates a new render context which is
     * used to render a set of values
     */
-    createContext() {
+    private createContext() {
         const context = new RenderContext({
             renderers: this.renderers,
             theme: this.theme,
@@ -69,30 +69,44 @@ export default class Console {
     /**
     * print any type of input to the console
     */
-    log({
-        values,
+    public log({
+        message,
         context = this.createContext(),
-        options,
-        callsite,
-        color,
-        moduleName,
     }: {
-        values: any[],
+        message: LogMessage,
         context?: RenderContext,
-        options?: any,
-        callsite?: ICallsite,
-        color?: string,
-        moduleName?: string,
     }) {
-        if (options) context.setOptions(options);
-        
+
+        let callsite: ICallsite | undefined;
+
+        if (message.hasCallsite()) {
+            const reference = message.getCallsite()!;
+            let type = '';
+            let method = '';
+            let functionName = '';
+
+            if (reference.functionName && reference.functionName.includes('.')) {
+                type = reference.functionName.split('.')[0];
+                method = reference.functionName.split('.')[1];
+            } else {
+                functionName = reference.functionName ?? '';
+            }
+
+            callsite = {
+                type: type,
+                function: functionName,
+                method: method,
+                fileName: reference.fileName ?? '',
+                lineNumber: reference.lineNumber ?? 0,
+                character: reference.columnNumber ?? 0,
+            };
+        }
+
         // render all values
         context.render({
-            values,
+            values: message.getValues(),
             callsite,
-            color,
-            options,
-            moduleName,
+            moduleName: message.getModuleName(),
         });
         
         // return the context to the user

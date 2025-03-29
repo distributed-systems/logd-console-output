@@ -2,6 +2,8 @@ import RenderContext from './RenderContext.js';
 import DefaultDark from './themes/DefaultDark.js';
 import * as renderers from './renderer/index.js';
 export default class Console {
+    renderers;
+    theme;
     constructor() {
         this.renderers = new Map();
         this.loadRenderers();
@@ -38,16 +40,34 @@ export default class Console {
     /**
     * print any type of input to the console
     */
-    log({ values, context = this.createContext(), options, callsite, color, moduleName, }) {
-        if (options)
-            context.setOptions(options);
+    log({ message, context = this.createContext(), }) {
+        let callsite;
+        if (message.hasCallsite()) {
+            const reference = message.getCallsite();
+            let type = '';
+            let method = '';
+            let functionName = '';
+            if (reference.functionName && reference.functionName.includes('.')) {
+                type = reference.functionName.split('.')[0];
+                method = reference.functionName.split('.')[1];
+            }
+            else {
+                functionName = reference.functionName ?? '';
+            }
+            callsite = {
+                type: type,
+                function: functionName,
+                method: method,
+                fileName: reference.fileName ?? '',
+                lineNumber: reference.lineNumber ?? 0,
+                character: reference.columnNumber ?? 0,
+            };
+        }
         // render all values
         context.render({
-            values,
+            values: message.getValues(),
             callsite,
-            color,
-            options,
-            moduleName,
+            moduleName: message.getModuleName(),
         });
         // return the context to the user
         return context;

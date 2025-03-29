@@ -1,4 +1,6 @@
 export default class TypeTheme {
+    name;
+    decorators;
     constructor(name, decorators) {
         this.decorators = new Map();
         this.name = name;

@@ -1,5 +1,14 @@
 import types from 'ee-types';
 export default class RenderContext {
+    indentation;
+    renderers;
+    printer;
+    theme;
+    level;
+    lineBuffer;
+    processedObjects;
+    maxArrayLength;
+    maxStringLength;
     constructor({ indentation, renderers, printer = console.log, theme, }) {
         if (theme.indentation)
             this.indentation = theme.indentation;

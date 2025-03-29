@@ -3,6 +3,7 @@ import RootPath from 'app-root-path';
 import path from 'path';
 import types from 'ee-types';
 export class ErrorRenderer extends Renderer {
+    errorProperties;
     constructor() {
         super();
         this.errorProperties = [

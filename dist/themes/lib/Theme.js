@@ -1,6 +1,8 @@
 export default class Theme {
+    name;
+    indentation;
+    types = new Map();
     constructor(name, indentation) {
-        this.types = new Map();
         this.name = name;
         this.indentation = indentation;
     }
