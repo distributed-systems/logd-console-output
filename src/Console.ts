@@ -3,8 +3,7 @@ import Renderer from './renderer/Renderer.js';
 import DefaultDark from './themes/DefaultDark.js';
 import * as renderers  from './renderer/index.js';
 import Theme from './themes/lib/Theme.js';
-import LogMessage from './LogMessage.js';
-import { truncate } from 'fs';
+import { LogMessage } from 'logd';
 
 
 

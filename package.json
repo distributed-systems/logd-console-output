@@ -19,6 +19,7 @@
   "devDependencies": {
     "@tsconfig/node22": "^22.0.1",
     "@types/node": "^22.13.14",
+    "logd": "^5.0.0",
     "typescript": "^5.8.2"
   },
   "dependencies": {

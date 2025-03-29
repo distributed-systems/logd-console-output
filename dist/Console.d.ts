@@ -1,5 +1,5 @@
 import RenderContext from './RenderContext.js';
-import LogMessage from './LogMessage.js';
+import { LogMessage } from 'logd';
 export default class Console {
     private renderers;
     private theme;
