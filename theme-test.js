@@ -1,8 +1,6 @@
-'use strict';
-
-
-const Logger = require('./');
-const log = new Logger();
+import Logd from './dist/Console.js';
+import LogMessage from './dist/LogMessage.js';
+const log = new Logd();
 
 
 const err = new Error(`Cannot think of a good error text, so i'm writing this sentence!`);
@@ -13,7 +11,7 @@ err.errno = 23423;
 
 const callsite = {
     lineNumber: 3425,
-    fileName: __filename,
+    fileName: 'src/index.js',
     type: 'Object',
     function: 'section.test',
     method: 'cb',
@@ -30,10 +28,7 @@ const aLongFunction = (some, paramters = {}) => {
     }
 };
 
-
-log.log({
-    callsite,
-    values: [
+const message = new LogMessage('local-test', 'info', [
         err,
         new Map([['key', {
             values: [1,2,3]
@@ -101,45 +96,8 @@ log.log({
             ],
         }]
     ]
-});
+);
 
 
+log.log({ message });
 
-
-
-log.log({
-    values: ['This value is invalid: NaN!'],
-    color: 'green.bold',
-    callsite: Object.assign({}, callsite, {lineNumber: 4}),
-});
-log.log({
-    values: [`I don't think this should happen!`],
-    color: 'yellow.bold',
-    callsite,
-});
-log.log({
-    values: [`This is critical!`],
-    color: 'red.bold',
-    callsite,
-});
-log.log({
-    values: [err],
-    color: 'red',
-    callsite,
-});
-
-log.log({
-    values: [`a pretty long string that should be trunctaed, but does it? I'm not sure, or am i? i am! So, i'm still in the airplane and someone keep sfarting. Thanks obama!`],
-    color: 'red.bold',
-    callsite,
-});
-
-log.log({
-    values: [`a pretty long string that should be trunctaed, but does it? I'm not sure, or am i? i am! So, i'm still in the airplane and someone keeps farting. Thanks obama! this one gets rendered!`],
-    color: 'cyan.bold.strikethrough.underline.bgBlue',
-    callsite,
-    moduleName: 'my-module',
-    options: {
-        truncate: 1000
-    }
-});

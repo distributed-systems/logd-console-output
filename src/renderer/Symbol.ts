@@ -19,6 +19,6 @@ export class SmbolRenderer extends Renderer {
         color,
     }: IRdenderOptions) {
         context.renderDecoration({label, decoration: (decoration ? decoration+' ' : '')+'[Symbol]', close: true});
-        context.print(this.decorate(context, value, 'text', color));
+        context.print(this.decorate(context, String(value), 'text', color));
     }
 }
