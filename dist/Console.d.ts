@@ -1,10 +1,10 @@
 import RenderContext from './RenderContext.js';
-import Renderer from './renderer/Renderer.js';
-import Theme from './themes/lib/Theme.js';
 import LogMessage from './LogMessage.js';
 export default class Console {
-    renderers: Map<string, Renderer>;
-    theme: Theme;
+    private renderers;
+    private theme;
+    private readonly colors;
+    private readonly options;
     constructor();
     /**
     * load all available renderers from the filesystem

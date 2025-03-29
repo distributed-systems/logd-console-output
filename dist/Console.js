@@ -4,6 +4,20 @@ import * as renderers from './renderer/index.js';
 export default class Console {
     renderers;
     theme;
+    colors = new Map([
+        ['debug', 'grey'],
+        ['notice', 'grey'],
+        ['info', 'white'],
+        ['warn', 'yellow.bold'],
+        ['error', 'red.bold'],
+        ['success', 'green.bold'],
+        ['highlight', 'cyan.bold'],
+        ['wtf', 'magenta.bold.bgWhite'],
+        ['default', 'blue.bold'],
+    ]);
+    options = {
+        truncate: 2000,
+    };
     constructor() {
         this.renderers = new Map();
         this.loadRenderers();
@@ -63,11 +77,15 @@ export default class Console {
                 character: reference.columnNumber ?? 0,
             };
         }
+        const color = this.colors.get(message.getLogLevel().level) ?? this.colors.get('default');
+        const options = this.options;
         // render all values
         context.render({
             values: message.getValues(),
             callsite,
             moduleName: message.getModuleName(),
+            color,
+            options,
         });
         // return the context to the user
         return context;

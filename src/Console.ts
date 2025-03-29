@@ -4,12 +4,31 @@ import DefaultDark from './themes/DefaultDark.js';
 import * as renderers  from './renderer/index.js';
 import Theme from './themes/lib/Theme.js';
 import LogMessage from './LogMessage.js';
+import { truncate } from 'fs';
+
 
 
 export default class Console {
 
-    renderers: Map<string, Renderer>;
-    theme: Theme;
+    private renderers: Map<string, Renderer>;
+    private theme: Theme;
+
+
+    private readonly colors : Map<string, string> = new Map([
+        ['debug', 'grey'],
+        ['notice', 'grey'],
+        ['info', 'white'],
+        ['warn', 'yellow.bold'],
+        ['error', 'red.bold'],
+        ['success', 'green.bold'],
+        ['highlight', 'cyan.bold'],
+        ['wtf', 'magenta.bold.bgWhite'],
+        ['default', 'blue.bold'],
+    ]);
+
+    private readonly options : Record<string, any> = {
+        truncate: 2000,
+    };
 
     constructor() {
         this.renderers = new Map();
@@ -76,7 +95,6 @@ export default class Console {
         message: LogMessage,
         context?: RenderContext,
     }) {
-
         let callsite: ICallsite | undefined;
 
         if (message.hasCallsite()) {
@@ -102,12 +120,20 @@ export default class Console {
             };
         }
 
+        const color = this.colors.get(message.getLogLevel().level) ?? this.colors.get('default');
+        const options = this.options;
+
         // render all values
         context.render({
             values: message.getValues(),
             callsite,
             moduleName: message.getModuleName(),
+            color,
+            options,
         });
+
+
+       
         
         // return the context to the user
         return context;
