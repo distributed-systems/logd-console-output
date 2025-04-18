@@ -153,6 +153,7 @@ export class ErrorRenderer extends Renderer {
     truncatePath(filepath = '') {
         const thisdir = path.dirname(new URL(import.meta.url).pathname);
         const rootPath = RootPath.resolve(thisdir);
+        filepath = filepath.replace('file://', '');
 
         // remove th eproject root
         if (filepath.startsWith(rootPath)) filepath = filepath.substr(rootPath.length+1);
