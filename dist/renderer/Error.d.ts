@@ -7,37 +7,15 @@ export declare class ErrorRenderer extends Renderer {
     /**
     * truncate string to a certain length
     */
-    truncateLeft(input: string, len?: number): string;
+    private truncateLeft;
     /**
     * pad strings do that they have a given length
     */
-    pad(input: string, len?: number, right?: boolean): string;
-    /**
-    * analyze the frames of the stack
-    */
-    analyzeFrames(frames: string[]): ({
-        fn: string | null;
-        alias: string | null;
-        path: string;
-        line: string | null;
-        character: string | null;
-        text?: undefined;
-    } | {
-        text: string;
-        fn?: undefined;
-        alias?: undefined;
-        path?: undefined;
-        line?: undefined;
-        character?: undefined;
-    })[];
+    private pad;
     /**
     * truncate paths so that the part of the projects
     * directory is removed
     */
-    truncatePath(filepath?: string): string;
-    /**
-    * convert the stack to an array containing strings
-    */
-    convertStack(err: Error): any[] | undefined;
+    private truncatePath;
 }
 //# sourceMappingURL=Error.d.ts.map

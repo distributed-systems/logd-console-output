@@ -2,6 +2,7 @@ import Renderer, { IRdenderOptions } from './Renderer.js';
 import RootPath from 'app-root-path';
 import path from 'path';
 import types from 'ee-types'
+import ErrorStackParser, { StackFrame } from 'error-stack-parser';
 
 
 
@@ -64,29 +65,22 @@ export class ErrorRenderer extends Renderer {
 
 
         // get a proper stack
-        const frames = this.convertStack(value) as any;
-        let structuredFrames = this.analyzeFrames(frames);
+        let structuredFrames = ErrorStackParser.parse(value);
 
-
-        // remove the first frame if it contains the error message
-        if (structuredFrames.length && structuredFrames[0].text && structuredFrames[0].text.includes(value.message)) {
-            structuredFrames = structuredFrames.slice(1);
-        }
 
         
         // print the frames
         structuredFrames.forEach((frame) => {
             context.newLine();
-            context.print(this.decorate(context, this.pad(this.truncateLeft(frame.path || 'n/a')), 'path'));
+            context.print(this.decorate(context, this.pad(this.truncateLeft(this.truncatePath(frame.fileName) || 'n/a')), 'path'));
             
-            if (frame.line) context.print(this.decorate(context, this.pad(`${frame.line}`, 5), 'line'));
+            if (frame.lineNumber) context.print(this.decorate(context, this.pad(`${frame.lineNumber}`, 5), 'line'));
             else context.print(' '.repeat(5));
 
-            if (frame.character) context.print(this.decorate(context, this.pad(`:${frame.character} `, 5, true), 'decoration'));
+            if (frame.columnNumber) context.print(this.decorate(context, this.pad(`:${frame.columnNumber} `, 5, true), 'decoration'));
             else context.print(' '.repeat(5));
 
-            context.print(this.decorate(context, (frame.fn || frame.text || '').trim(), 'function'));
-            if (frame.alias) context.print(this.decorate(context, ` (${frame.alias})`, 'decoration'));
+            if (frame.functionName) context.print(this.decorate(context, (frame.functionName ?? '').trim(), 'function'));
         });
     }
 
@@ -98,7 +92,7 @@ export class ErrorRenderer extends Renderer {
     /**
     * truncate string to a certain length
     */
-    truncateLeft(input: string, len = 31) {
+    private truncateLeft(input: string, len = 31) {
         if (input.length > len) return '\u2026'+input.substr(input.length-len+1);
         return input;
     }
@@ -111,7 +105,7 @@ export class ErrorRenderer extends Renderer {
     /**
     * pad strings do that they have a given length
     */
-    pad(input: string, len = 31, right = false) {
+    private pad(input: string, len = 31, right = false) {
         if (input.length < len) {
             if (right) return input+' '.repeat(len-input.length);
             else return ' '.repeat(len-input.length)+input;
@@ -123,25 +117,6 @@ export class ErrorRenderer extends Renderer {
 
 
 
-    /**
-    * analyze the frames of the stack
-    */
-    analyzeFrames(frames: string[]) {
-        return frames.map((frame) => {
-            const result = /(?:\n|^)\s*(?:at)?\s*([^\(\[]+)(?:\[([^\]]+)\])?\s*\(([^\):]+):?([^\):]+)?:?([0-9]+)?\)/gi.exec(frame);
-
-            if (result) {
-                return {
-                    fn: result[1] ? result[1].trim() : null,
-                    alias: result[2] || null,
-                    path: this.truncatePath(result[3]),
-                    line: result[4] && result[4] !== 'null' ? result[4] : null,
-                    character: result[5] || null,
-                };
-            } else return {text: frame};
-        });
-    }
-
 
 
 
@@ -150,7 +125,7 @@ export class ErrorRenderer extends Renderer {
     * truncate paths so that the part of the projects
     * directory is removed
     */
-    truncatePath(filepath = '') {
+    private truncatePath(filepath = '') {
         const thisdir = path.dirname(new URL(import.meta.url).pathname);
         const rootPath = RootPath.resolve(thisdir);
         filepath = filepath.replace('file://', '');
@@ -163,26 +138,5 @@ export class ErrorRenderer extends Renderer {
         if (index >= 0) filepath = 'nm:'+filepath.substr(index+'node_modules'.length);
 
         return filepath;
-    }
-
-
-
-
-    /**
-    * convert the stack to an array containing strings
-    */
-    convertStack(err: Error) {
-        let frames;
-
-        if (types.array(err.stack)) {
-            frames = err.stack.map((frame) => {
-                if (types.string(frame)) return frame;
-                else return frame.toString();
-            });
-        } else if (types.string(err.stack)) {
-            frames = err.stack!.split(/\n/g);
-        }
-
-        return frames;
     }
 }

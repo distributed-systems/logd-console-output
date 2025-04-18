@@ -1,7 +1,7 @@
 import Renderer from './Renderer.js';
 import RootPath from 'app-root-path';
 import path from 'path';
-import types from 'ee-types';
+import ErrorStackParser from 'error-stack-parser';
 export class ErrorRenderer extends Renderer {
     errorProperties;
     constructor() {
@@ -37,27 +37,21 @@ export class ErrorRenderer extends Renderer {
             });
         }
         // get a proper stack
-        const frames = this.convertStack(value);
-        let structuredFrames = this.analyzeFrames(frames);
-        // remove the first frame if it contains the error message
-        if (structuredFrames.length && structuredFrames[0].text && structuredFrames[0].text.includes(value.message)) {
-            structuredFrames = structuredFrames.slice(1);
-        }
+        let structuredFrames = ErrorStackParser.parse(value);
         // print the frames
         structuredFrames.forEach((frame) => {
             context.newLine();
-            context.print(this.decorate(context, this.pad(this.truncateLeft(frame.path || 'n/a')), 'path'));
-            if (frame.line)
-                context.print(this.decorate(context, this.pad(`${frame.line}`, 5), 'line'));
+            context.print(this.decorate(context, this.pad(this.truncateLeft(this.truncatePath(frame.fileName) || 'n/a')), 'path'));
+            if (frame.lineNumber)
+                context.print(this.decorate(context, this.pad(`${frame.lineNumber}`, 5), 'line'));
             else
                 context.print(' '.repeat(5));
-            if (frame.character)
-                context.print(this.decorate(context, this.pad(`:${frame.character} `, 5, true), 'decoration'));
+            if (frame.columnNumber)
+                context.print(this.decorate(context, this.pad(`:${frame.columnNumber} `, 5, true), 'decoration'));
             else
                 context.print(' '.repeat(5));
-            context.print(this.decorate(context, (frame.fn || frame.text || '').trim(), 'function'));
-            if (frame.alias)
-                context.print(this.decorate(context, ` (${frame.alias})`, 'decoration'));
+            if (frame.functionName)
+                context.print(this.decorate(context, (frame.functionName ?? '').trim(), 'function'));
         });
     }
     /**
@@ -82,31 +76,13 @@ export class ErrorRenderer extends Renderer {
             return input;
     }
     /**
-    * analyze the frames of the stack
-    */
-    analyzeFrames(frames) {
-        return frames.map((frame) => {
-            const result = /(?:\n|^)\s*(?:at)?\s*([^\(\[]+)(?:\[([^\]]+)\])?\s*\(([^\):]+):?([^\):]+)?:?([0-9]+)?\)/gi.exec(frame);
-            if (result) {
-                return {
-                    fn: result[1] ? result[1].trim() : null,
-                    alias: result[2] || null,
-                    path: this.truncatePath(result[3]),
-                    line: result[4] && result[4] !== 'null' ? result[4] : null,
-                    character: result[5] || null,
-                };
-            }
-            else
-                return { text: frame };
-        });
-    }
-    /**
     * truncate paths so that the part of the projects
     * directory is removed
     */
     truncatePath(filepath = '') {
         const thisdir = path.dirname(new URL(import.meta.url).pathname);
         const rootPath = RootPath.resolve(thisdir);
+        filepath = filepath.replace('file://', '');
         // remove th eproject root
         if (filepath.startsWith(rootPath))
             filepath = filepath.substr(rootPath.length + 1);
@@ -115,24 +91,6 @@ export class ErrorRenderer extends Renderer {
         if (index >= 0)
             filepath = 'nm:' + filepath.substr(index + 'node_modules'.length);
         return filepath;
-    }
-    /**
-    * convert the stack to an array containing strings
-    */
-    convertStack(err) {
-        let frames;
-        if (types.array(err.stack)) {
-            frames = err.stack.map((frame) => {
-                if (types.string(frame))
-                    return frame;
-                else
-                    return frame.toString();
-            });
-        }
-        else if (types.string(err.stack)) {
-            frames = err.stack.split(/\n/g);
-        }
-        return frames;
     }
 }
 //# sourceMappingURL=Error.js.map
